@@ -5,12 +5,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -21,7 +23,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.practice.ui.theme.PracticeTheme
@@ -59,14 +64,16 @@ fun GreetingPreview() {
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun ComposableTextField(modifier: Modifier = Modifier) {
     var tfTxet by remember { mutableStateOf("") }
     TextField(
         value = tfTxet,
         onValueChange = { tfTxet = it },
-        modifier = Modifier.fillMaxSize().padding(30.dp).wrapContentSize(Alignment.Center),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(30.dp)
+            .wrapContentSize(Alignment.Center),
         //modifier = modifier.then(Modifier.padding(30.dp)).then(Modifier.wrapContentSize(Alignment.Center))
         label = { Text("Email") },
         placeholder = { Text("Enter it") } ,//Optional
@@ -82,4 +89,42 @@ fun ComposableTextField(modifier: Modifier = Modifier) {
 
 
     )
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun PassEye(modifier: Modifier = Modifier) {
+
+    Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+        var valtext by remember { mutableStateOf("") }
+
+        var passVisible by remember { mutableStateOf(true) }
+
+        TextField(value = valtext,
+                  onValueChange = {valtext =it},
+                  label = { Text("Password") },
+                  trailingIcon = {
+                      IconButton(onClick = { passVisible = !passVisible })
+                      {
+                          Icon(imageVector =
+                          if (passVisible){
+                              ImageVector.vectorResource(id = R.drawable.visibility_24dp_e8eaed_fill0_wght400_grad0_opsz24 )
+                          }
+                          else{
+                                  ImageVector.vectorResource(id = R.drawable.visibility_off_24dp_e8eaed_fill0_wght400_grad0_opsz24)
+                              },
+                              contentDescription = "")
+                      }
+                  },
+            visualTransformation = if (passVisible){
+                PasswordVisualTransformation()
+            }
+            else{
+                VisualTransformation.None
+            }
+
+
+            )
+
+    }
 }
