@@ -1,16 +1,23 @@
 package com.example.practice
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -25,6 +32,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,8 +48,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             PracticeTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
+                    Checkboxexample(
+                        //name = "Android",
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -48,22 +58,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-
-@Composable
-fun GreetingPreview() {
-    PracticeTheme {
-        Greeting("Android")
-    }
-}
-
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun ComposableTextField(modifier: Modifier = Modifier) {
     var tfTxet by remember { mutableStateOf("") }
@@ -85,13 +80,19 @@ fun ComposableTextField(modifier: Modifier = Modifier) {
         suffix = {}, // if you want to add something or text in the end of the text field like @gmail.com
         supportingText = {}, // if you want to add something or text in the bottom of the text field
         //isError = true, // make iserror true until all req. filled are done to continue for submission.
-        visualTransformation = PasswordVisualTransformation() // it used for password hiding
-
+        //visualTransformation = PasswordVisualTransformation(), // it used for password hiding
+        keyboardOptions = KeyboardOptions(
+            capitalization = KeyboardCapitalization.Words,
+            keyboardType = KeyboardType.Email,
+            imeAction = ImeAction.Search
+            ),
+        keyboardActions = KeyboardActions(
+            onSearch = { Log.d("ImeAction", "Clicked on search")}
+        )
 
     )
 }
 
-@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PassEye(modifier: Modifier = Modifier) {
 
@@ -126,5 +127,48 @@ fun PassEye(modifier: Modifier = Modifier) {
 
             )
 
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun Checkboxexample(modifier: Modifier = Modifier) {
+    var checked by remember { mutableStateOf(false) }
+
+    Row (modifier = Modifier.fillMaxSize().wrapContentSize(Alignment.Center)){
+        Text("Male")
+        Checkbox(checked = checked, onCheckedChange = {checked =!checked})
+        Text("Female")
+        Checkbox(checked = !checked, onCheckedChange = {checked = !checked})
+
+    }
+    Text(modifier = Modifier.padding(50.dp),text = "${if (checked) "Checked" else "Unchecked"}")
+
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun CheckboxExample(modifier: Modifier = Modifier) {
+    var isMaleChecked by remember { mutableStateOf(false) }
+    var isFemaleChecked by remember { mutableStateOf(false) }
+
+    Row(modifier = modifier) {
+        Text("Male")
+        Checkbox(
+            checked = isMaleChecked,
+            onCheckedChange = {
+                isMaleChecked = it
+                if (it) isFemaleChecked = false // Uncheck Female if Male is checked
+            }
+        )
+        Spacer(modifier = Modifier.width(8.dp)) // Add some space between items
+        Text("Female")
+        Checkbox(
+            checked = isFemaleChecked,
+            onCheckedChange = {
+                isFemaleChecked = it
+                if (it) isMaleChecked = false // Uncheck Male if Female is checked
+            }
+        )
     }
 }
