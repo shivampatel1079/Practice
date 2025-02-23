@@ -10,6 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+//import androidx.compose.foundation.layout.FlowRowScopeInstance.align
 import androidx.compose.foundation.layout.PaddingValues
 //import androidx.compose.foundation.layout.FlowRowScopeInstance.align
 import androidx.compose.foundation.layout.Row
@@ -30,6 +31,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
@@ -40,6 +42,8 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
@@ -52,6 +56,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
@@ -62,11 +67,13 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -76,15 +83,18 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.practice.ui.theme.PracticeTheme
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -486,5 +496,101 @@ fun ComposableNavigationDrawer(modifier: Modifier = Modifier) {
 
     ) {
         ComposableScaffoldNavigation(drawerState)
+    }
+}
+
+//@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun ComposableDialog(modifier: Modifier = Modifier) {
+    var showDialog by rememberSaveable { mutableStateOf(false) }
+
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Button(onClick = {showDialog = true}) {
+            Text("Show Dialog")
+        }
+    }
+
+    if (showDialog){
+        AlertDialog(
+            onDismissRequest = {
+                showDialog = false
+            } ,
+            confirmButton = {
+                Button(onClick = {showDialog = false}) {
+                    Text("Confirm")
+                }
+            },
+            dismissButton = {
+                Button(onClick = {showDialog = false}) {
+                    Text("Dismiss")
+                }
+            },
+            icon = {
+                Icon(imageVector = Icons.Default.Build, contentDescription = "")
+            },
+            title = { Text("Alert Dialog") },
+            text = { Text("This is a alert dialog") },
+            )
+    }
+    // If use Dialog then we can customize our dialog as we can pass content here
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+//@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun ComposableBottomSheet(modifier: Modifier = Modifier) {
+    var showBottomSheet by remember { mutableStateOf(false) }
+    var sheetState = rememberModalBottomSheetState()
+    var scope = rememberCoroutineScope()
+
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Button(onClick = {showBottomSheet = true}) {
+            Text("Show Sheet")
+        }
+    }
+
+    if (showBottomSheet) {
+        ModalBottomSheet(onDismissRequest = {
+            showBottomSheet = false
+        }
+        ) {
+            Text(modifier = Modifier.fillMaxWidth(),text = "Select",fontWeight = FontWeight.Bold,fontSize = 26.sp, textAlign = TextAlign.Center)
+            Spacer(modifier = Modifier.height(20.dp))
+            Row(modifier = Modifier.padding(start = 16.dp)) {
+                Icon(imageVector = Icons.Default.ShoppingCart, contentDescription = "")
+                Spacer(modifier = Modifier.width(15.dp))
+                Text("Add")
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+            Row(modifier = Modifier.padding(start = 16.dp)) {
+                Icon(imageVector = Icons.Default.ShoppingCart, contentDescription = "")
+                Spacer(modifier = Modifier.width(15.dp))
+                Text("Add")
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+            Row(modifier = Modifier.padding(start = 16.dp)) {
+                Icon(imageVector = Icons.Default.ShoppingCart, contentDescription = "")
+                Spacer(modifier = Modifier.width(15.dp))
+                Text("Add")
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
+                modifier = Modifier.align(Alignment.CenterHorizontally).padding(10.dp),
+                onClick = {
+                    scope.launch {
+                        sheetState.hide()
+                        showBottomSheet = false
+                    }
+            }) {
+                Text("Hide Sheet")
+            }
+        }
     }
 }
