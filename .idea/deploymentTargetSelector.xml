@@ -5,19 +5,19 @@
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="CheckboxTrail">
+      <SelectionState runConfigName="ComposableRememberScope">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="ComposableScaffold">
+      <SelectionState runConfigName="ComposableRememberUpdatedState">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="ComposableNavigationDrawer">
+      <SelectionState runConfigName="ComposableProduceState">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="ComposableDialog">
+      <SelectionState runConfigName="ComposableLoading">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="ComposableBottomSheet">
+      <SelectionState runConfigName="ComposableDerivedState">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
